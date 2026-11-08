@@ -1,0 +1,73 @@
+create CATALOG if not exists family;
+create SCHEMA if not exists family.gauteng;
+create table if not exists family.gauteng.products (product_id INT ,product_name STRING ,price
+INT);
+INSERT INTO family.gauteng.products VALUES (1,'Laptop',1200),(2,'Phone',800),(3,'Keyboard',45),(4, 'Monitor',300 ),(5, 'Mouse', 25);
+
+SELECT * FROM family.gauteng.products;
+
+--Question 01: Classify each product by price into the three tiers below,'Expensive' if price > 1000,'Mid-range' if price between 100 and 1000'Budget' if price < 100 --expected col:are product name,price,price_category
+
+SELECT product_name,price,
+CASE WHEN price > 1000 THEN 'Expensive' 
+WHEN price BETWEEN 100 AND 1000 THEN 'Mid-range' 
+WHEN price < 100 THEN 'Budget'
+END AS price_category 
+FROM family.gauteng.products;
+
+create CATALOG if not exists fullergood;
+create SCHEMA if not exists fullergood.honey;
+create TABLE if not exists fullergood.honey.orders (order_id INT, customer_name STRING, amount INT);
+INSERT INTO fullergood.honey.orders VALUES (1,'Alice',150),(2,'Bob',560),(3,'Charlie',999.99),(4, 'Diana',45.50),(5,'Ethan',1200);
+
+--Question 02: Label each order by its value.'High Value' for orders ≥ 1000'Medium Value' for 500–999.99'Low Value' for orders < 500 : customer_name amount order_value_category
+SELECT customer_name, amount, CASE WHEN amount >= 1000 THEN 'High Value' WHEN amount BETWEEN 500 AND 999.99 THEN 'Medium Value' ELSE 'Low Value' END AS order_value_category FROM fullergood.honey.orders;
+
+create CATALOG if not exists ringers;
+create SCHEMA if not exists ringers.lactate;
+create TABLE if not exists ringers.lactate.employees (emp_id INT, emp_name STRING, department STRING, salary INT);
+INSERT INTO ringers.lactate.employees VALUES (1, 'John', 'IT', 85000 ), (2, 'Sara', 'HR', 60000), (3, 'Mark', 'IT', 75000), (4, 'Lucy', 'Finance' ,95000), (5, 'Tom', 'HR', 55000);
+
+SELECT * FROM ringers.lactate.employees;
+
+--Question 03:Categorize each employee's position level using both department and salary.If in 'IT' and salary > 80000 → 'Senior IT' If in 'HR' and salary > 55000 → 'Experienced HR' Otherwise → 'Staff' :: emp_name department salary position_level
+
+SELECT emp_name, department, salary,
+CASE WHEN department = 'IT' AND salary > 80000 THEN 'Senior IT' WHEN department = 'HR' AND salary > 55000 THEN 'Experienced HR'
+ELSE 'Staff'
+END AS position_level
+FROM ringers.lactate.employees;
+
+create CATALOG if not exists state;
+create SCHEMA if not exists state.welkom;
+create TABLE if not exists state.welkom.students ( student_id INT, student_name STRING, score INT);
+INSERT INTO state.welkom.students VALUES (1,'Anna', 92),
+(2, 'Ben', 76),
+(3, 'Cara', 59),
+(4, 'David', 83),
+(5 ,'Ella',68);
+SELECT * FROM state.welkom.students;
+
+--Question 04: Assign each student a letter grade based on their score ≥ 90 → 'A' 80–89 → 'B' 70–79 → 'C' 60–69 → 'D' < 60 → 'F'
+
+SELECT student_name, score, CASE WHEN score >= 90 THEN 'A'
+WHEN   score BETWEEN 80 AND 89 THEN 'B'
+WHEN score BETWEEN 70 AND 79 THEN 'C'
+WHEN score BETWEEN 60 AND 69 THEN 'D'
+WHEN score < 60 THEN 'F'
+END AS grade FROM state.welkom.students;
+
+create CATALOG if not exists province;
+create SCHEMA if not exists province.welkom;
+create TABLE if not exists province.welkom.deliveries ( delivery_id INT, delivery_time_minutes INT);
+INSERT INTO province.welkom.deliveries VALUES (1, 45),(2, 80), (3,30), (4,65), (5,100);
+SELECT * FROM province.welkom.deliveries;
+--QUESTION 05: Label delivery performance based on the time taken.
+--<= 30 mins → 'Fast' 31–60 mins → 'On Time' > 60 mins → 'Late' E X P E C T E D C O L U M N S : delivery_id delivery_time_minutes performance
+
+SELECT delivery_id, delivery_time_minutes, 
+CASE WHEN delivery_time_minutes <= 30 THEN 'Fast'
+     WHEN delivery_time_minutes BETWEEN 31 AND 60 THEN 'On Time' 
+     WHEN delivery_time_minutes > 60 THEN 'Late' END AS performance FROM province.welkom.deliveries;
+
+     -- END  --
